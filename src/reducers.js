@@ -1,10 +1,9 @@
-import HeaderReducer from './containers/header/header.reducer'
 import {
 	StackNav
 } from './routes'
 
 import {combineReducers} from "redux";
-
+import HomeReducer from './containers/home/home.reducer'
 const initialState = StackNav.router.getStateForAction(StackNav.router.getActionForPathAndParams('Home'));
 
 const navReducer = (state = initialState, action) => {
@@ -15,10 +14,12 @@ const navReducer = (state = initialState, action) => {
 	return nextState || state;
 };
 
+
+//here we show in the page reducers also keepo
+
 const allReducer = combineReducers({
 	nav: navReducer,
-
-
+	home: HomeReducer,
 
 });
 

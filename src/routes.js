@@ -1,9 +1,8 @@
 
 import React from 'react'
 import {addNavigationHelpers, StackNavigator} from "react-navigation";
-import HomePage from './components/Home'
+import Home from './containers/home/home.container'
 import AboutPage from './components/About'
-import {combineReducers, createStore} from "redux";
 import {connect} from "react-redux";
 import {
 	Platform
@@ -11,10 +10,14 @@ import {
 
 
 export const StackNav = StackNavigator({
-	Home: { screen: HomePage },
+	Home: { screen: Home },
 	About: { screen: AboutPage },
 }, {
-	navigationOptions: { headerStyle: { marginTop: Platform.OS === 'ios' ? 0 :Expo.Constants.statusBarHeight } }
+	navigationOptions: {
+		headerStyle: {
+			marginTop: Platform.OS === 'ios' ? 0 :Expo.Constants.statusBarHeight
+		}
+	}
 });
 
 
@@ -33,7 +36,10 @@ class Routes extends React.Component {
 
 export default  connect((state) => ({
 	nav: state.nav
-}))(Routes);
+
+	}), () => ({
+
+	}))(Routes);
 
 
 
