@@ -1,21 +1,22 @@
 import React from 'react'
 import {Text, View} from "react-native";
+import {styles} from "../../App";
+
 
 class AboutPage extends React.Component{
 
-	static navigationOptions = ({ navigation }) => ({
-		title: `dickerino`,
-	});
+    render(){
 
-	render(){
-		return (
-			<View>
+        const {navigate} = this.props.navigation;
+
+        return (
+			<View style={styles.view}>
 				<Text>
-					This is a about page
+					This is an about page
 				</Text>
 			</View>
-		)
-	}
+        )
+    }
 
 }
 

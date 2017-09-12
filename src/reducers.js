@@ -1,10 +1,8 @@
-import {
-	StackNav
-} from './routes'
-
+import {StackNav} from './routes'
 import {combineReducers} from "redux";
 import HomeReducer from './containers/home/home.reducer'
-const initialState = StackNav.router.getStateForAction(StackNav.router.getActionForPathAndParams('Home'));
+
+const initialState = StackNav.router.getStateForAction(StackNav.router.getActionForPathAndParams('TabNav'));
 
 const navReducer = (state = initialState, action) => {
 
