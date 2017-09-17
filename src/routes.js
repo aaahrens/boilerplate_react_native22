@@ -31,8 +31,8 @@ export const MainTabNav = TabNavigator({
 });
 
 const HighestNavigator = StackNavigator({
-	StackOne: {screen: MainTabNav},
-	StackTwo: {screen: AboutPage}
+	One: {screen: MainTabNav},
+	Two: {screen: AboutPage}
 });
 
 
