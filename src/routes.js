@@ -1,95 +1,78 @@
-import React from 'react'
-import {addNavigationHelpers, StackNavigator, TabNavigator} from "react-navigation";
+import React from 'react';
+import {Button, ScrollView, Text} from 'react-native';
+import {addNavigationHelpers, StackNavigator, TabNavigator} from 'react-navigation';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {connect} from 'react-redux';
-import {Platform} from 'react-native';
-import AboutPage from './components/About';
-import Home from './containers/home/home.container';
+import {StyleSheet} from 'react-native'
+import AboutPage from "./components/About";
+import thunk from "redux-thunk";
+import HomeReducer from "./containers/home/home.reducer";
+// This function is used to create components.
+// It expects a name and a list of optional links to other routes.
+// The generated component is connected to Redux to display the content of the store.
+// This function is used below to easily generate components.
 
 
-export const homeStackNav = StackNavigator({
-    Home: {
-        screen: Home,
-        navigationOptions: ({navigation}) => ({
-            title: 'Browse'
-        })
-    }
-}, {
-    navigationOptions: ({navigation}) => ({
-        headerBackTitle: null,
-        headerStyle: {
-            backgroundColor: '#406090',
-
-            marginTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
-        },
-        headerTintColor: 'white',
-    })
+// The nested StackNavigator
+const NestedNavigator = StackNavigator({
+	StackOne: {screen: AboutPage},
+	StackTwo: {screen: AboutPage}
 });
 
 
-export const TabNav = TabNavigator({
-    homeStackNav: {
-        screen: homeStackNav,
-        navigationOptions: ({navigation}) => ({
-            title: 'Browse',
-        })
-    },
+// Two tabs, second one is a nested StackNavigator
+export const MainTabNav = TabNavigator({
+	TabA: {
+		screen: AboutPage
+	},
+	TabNested: {
+		screen: NestedNavigator
+	},
+});
 
-    AboutPage: {
-        screen: AboutPage,
-        navigationOptions: ({navigation}) => ({
-            title: 'Games'
-        })
-    },
-
-}, {
-    swipeEnabled: true,
-    tabBarPosition: 'bottom',
-    tabBarOptions: {
-        activeTintColor: 'white',
-        inactiveTintColor: 'black',
-        activeBackgroundColor: '#406090',
-        labelStyle: {
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 14,
-        }
-    }
+const HighestNavigator = StackNavigator({
+	StackOne: {screen: MainTabNav},
+	StackTwo: {screen: AboutPage}
 });
 
 
-export const StackNav = StackNavigator({
-	TabNav: { screen: TabNav },
-}, {
-	navigationOptions: {
-		headerStyle: {
-			marginTop: Platform.OS === 'ios' ? 0 :Expo.Constants.statusBarHeight
-		}
+// This connects the MainTabNav to Redux to delegate the whole routing
+export const AppWithNavigationState = connect(
+	state => ({
+		nav: state.nav,
+	}))
+	(({dispatch, nav}) => (
+	<HighestNavigator navigation={addNavigationHelpers({dispatch, state: nav})}/>
+));
+
+
+// Redux setup.
+// Creating reducer from the main navigator.
+
+
+
+const appReducer = (state, action) => HighestNavigator.router.getStateForAction(action, state);
+
+const allReducers = combineReducers({
+	nav: appReducer,
+	home : HomeReducer
+});
+
+export const store = createStore(allReducers , applyMiddleware(thunk));
+
+
+// Ignore what is below. It is just some basic styling
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		marginTop: 20
+	},
+	title: {
+		backgroundColor: 'rgba(0, 0, 0, 0.1)',
+		padding: 16,
+	},
+	store: {
+		padding: 6,
+		backgroundColor: '#eee',
 	}
 });
-
-
-
-class Routes extends React.Component {
-	render() {
-		return (
-			<StackNav navigation={addNavigationHelpers({
-				dispatch: this.props.dispatch,
-				state: this.props.nav,
-			})} />
-		);
-	}
-}
-
-
-export default  connect((state) => ({
-	nav: state.nav
-
-	}), () => ({
-
-	}))(Routes);
-
-
-
-
-

@@ -1,26 +1,26 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {store} from './src/store'
 import {Provider} from 'react-redux'
-import Routes from './src/routes'
+import {AppWithNavigationState, store} from './src/routes'
+
 
 export default class App extends React.Component {
 
-    render() {
-        return (
+	render() {
+		return (
 			<Provider store={store}>
-				<Routes/>
+				<AppWithNavigationState/>
 			</Provider>
-        )
-    }
+		)
+	}
 }
 
 
 export const styles = StyleSheet.create({
-    view: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-    },
+	view: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: 'white',
+	},
 });
